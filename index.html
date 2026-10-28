@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Protocolo</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' fill='%23050806'/%3E%3Ccircle cx='8' cy='8' r='4' fill='none' stroke='%23c8ffd9'/%3E%3C/svg%3E" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <canvas id="view"></canvas>
+    <div id="hud">
+      <div class="row">
+        <div>
+          <div class="label">PROTOCOLO</div>
+          <div class="state" id="state">DESVÍO</div>
+          <div class="meter"><span id="meter"></span></div>
+          <div class="voices">
+            <b data-voice="pulso">PULSO</b>
+            <b data-voice="arpegio">ARPEGIO</b>
+            <b data-voice="aire">AIRE</b>
+            <b data-voice="falla">FALLA</b>
+          </div>
+        </div>
+        <div class="readout">
+          <div class="label">K</div>
+          <div class="value" id="k">1.2</div>
+          <div class="label">DERIVA</div>
+          <div class="value" id="spread">1.00</div>
+          <div class="label">ORDEN</div>
+          <div class="value" id="r">0.00</div>
+        </div>
+      </div>
+      <div class="row">
+        <div id="node">NINGÚN NODO</div>
+        <p id="help">
+          Vacío arriba o abajo: K. Arrastra un nodo: fase y tempo. Flechas: deriva. Espacio: golpe. 1–8 elige. R fases. M silencio.
+        </p>
+      </div>
+    </div>
+    <div id="enter-wrap">
+      <div id="enter-card">
+        <div class="label">PROTOCOLO</div>
+        <p>Ocho nodos. El reloj todavía no es de todos.</p>
+        <button id="enter" type="button">ENTRAR</button>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
