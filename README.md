@@ -51,12 +51,12 @@ Hay dos nodos de cada una.
 
 | Voz | Imagen | Sonido |
 | --- | --- | --- |
-| Pulso | Una mira que gira con la fase y destella al cerrar el ciclo | Golpe corto de ruido |
-| Arpegio | Una columna de ocho pasos | Una nota de una escala menor en cada paso. El segundo nodo armoniza |
-| Aire | Un anillo que respira | Un pad. Se desafina según su distancia a la fase del grupo |
-| Falla | Un sólido que se desplaza cuando no coincide | Ruido que crece con esa misma distancia |
+| Pulso | Una mira que gira con la fase y destella al cerrar el ciclo | Latido lejano. Si el nodo se sale de fase, el latido tartamudea |
+| Arpegio | Una columna de ocho pasos | Melodía en seno, una octava arriba, con cola larga. Fuera de fase se corta o salta |
+| Aire | Un anillo que respira | Colchón debajo de la melodía. Se desafina según su distancia a la fase del grupo |
+| Falla | Un sólido que se desplaza cuando no coincide | Ruido grave. Fuera de fase aparece y se corta en trozos |
 
-El zumbido grave crece con el orden. La radio crece con el desorden. El reloj pequeño de arriba marca la fase media del grupo.
+Abajo hay un drone de 55 Hz, siempre, con un segundo tono casi igual. Ese roce se llama batido: dos notas tan cerca que se oye un pulso lento. Con el orden se suma una quinta y el drone se cierra. Con el desorden crece la radio. La reverberación dura unos ocho segundos. El reloj pequeño de arriba marca la fase media del grupo.
 
 ## Dónde cambiar cosas
 
