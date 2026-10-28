@@ -14,7 +14,13 @@ dθᵢ/dt = ωᵢ + (K / N) · Σ sin(θⱼ − θᵢ)
 - **N** es 8.
 - **r** es el orden del grupo: cerca de 0 desvío, en el medio acoplado, cerca de 1 cerrado.
 
-## Cómo abrirlo
+## Probar en la web
+
+https://cognitivearia.github.io/Kuramoto_exploration/
+
+Pulsa **Entrar**. El navegador solo deja sonar después de ese gesto.
+
+## Cómo abrirlo en local
 
 Hace falta Node.
 
