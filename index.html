@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Protocolo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <canvas id="view"></canvas>
+    <div id="hud">
+      <div class="row">
+        <div>
+          <div class="label">PROTOCOLO</div>
+          <div class="state" id="state">DESVÍO</div>
+          <div class="meter"><span id="meter"></span></div>
+          <div class="voices">
+            <b data-voice="pulso">PULSO</b>
+            <b data-voice="arpegio">ARPEGIO</b>
+            <b data-voice="aire">AIRE</b>
+            <b data-voice="falla">FALLA</b>
+          </div>
+        </div>
+        <div class="readout">
+          <div class="label">K</div>
+          <div class="value" id="k">1.2</div>
+          <div class="label">DERIVA</div>
+          <div class="value" id="spread">1.00</div>
+          <div class="label">ORDEN</div>
+          <div class="value" id="r">0.00</div>
+        </div>
+      </div>
+      <div class="row">
+        <div id="node">NINGÚN NODO</div>
+        <p id="help">
+          Arrastra el vacío hacia arriba para subir K. Arrastra un nodo: horizontal cambia su fase, vertical su tempo.
+          Flechas izquierda y derecha: deriva. Espacio: golpe al nodo elegido, o a todos. Mayús + espacio: golpe a todos.
+          R nuevas fases. M silencio. 1–8 elige nodo.
+        </p>
+      </div>
+    </div>
+    <div id="enter-wrap">
+      <div id="enter-card">
+        <div class="label">PROTOCOLO</div>
+        <p>Ocho nodos. El reloj todavía no es de todos.</p>
+        <button id="enter" type="button">ENTRAR</button>
+      </div>
+    </div>
+    <script type="module" src="/src/main.js"></script>
+  </body>
+</html>
