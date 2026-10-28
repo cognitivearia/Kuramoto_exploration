@@ -18,7 +18,7 @@ dθᵢ/dt = ωᵢ + (K / N) · Σ sin(θⱼ − θᵢ)
 
 https://cognitivearia.github.io/Kuramoto_exploration/
 
-Pulsa **Entrar**. El navegador solo deja sonar después de ese gesto.
+La primera vez hay que encender Pages en el repositorio: Settings, Pages, origen **GitHub Actions**. Después, cada push publica solo. Pulsa **Entrar**. El navegador solo deja sonar después de ese gesto.
 
 ## Cómo abrirlo en local
 
