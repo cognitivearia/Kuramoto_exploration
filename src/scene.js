@@ -4,6 +4,8 @@ import { RenderPass } from "three/addons/postprocessing/RenderPass.js";
 import { UnrealBloomPass } from "three/addons/postprocessing/UnrealBloomPass.js";
 import { ShaderPass } from "three/addons/postprocessing/ShaderPass.js";
 import { OutputPass } from "three/addons/postprocessing/OutputPass.js";
+import { CopyShader } from "three/addons/shaders/CopyShader.js";
+import { FullScreenQuad } from "three/addons/postprocessing/Pass.js";
 import { angleDiff } from "./kuramoto.js";
 import { CRTShader } from "./crt.js";
 
@@ -227,6 +229,18 @@ export function createWorld(canvas) {
   composer.addPass(crt);
   composer.addPass(new OutputPass());
 
+  const ghost = new THREE.WebGLRenderTarget(1, 1, {
+    type: THREE.HalfFloatType,
+    depthBuffer: false,
+    stencilBuffer: false,
+  });
+  const ghostCopy = new THREE.ShaderMaterial({
+    uniforms: THREE.UniformsUtils.clone(CopyShader.uniforms),
+    vertexShader: CopyShader.vertexShader,
+    fragmentShader: CopyShader.fragmentShader,
+  });
+  const ghostQuad = new FullScreenQuad(ghostCopy);
+
   const raycaster = new THREE.Raycaster();
   const pointer = new THREE.Vector2();
   const look = new THREE.Vector3(0, 0.02, 0);
@@ -239,7 +253,9 @@ export function createWorld(canvas) {
     renderer.setSize(width, height);
     composer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
     composer.setSize(width, height);
+    ghost.setSize(composer.writeBuffer.width, composer.writeBuffer.height);
   }
+  resize();
 
   function paint(node, color, intensity) {
     const materialColor = intensity > 0.55 ? PHOSPHOR : color;
@@ -343,8 +359,16 @@ export function createWorld(canvas) {
     crt.uniforms.uTear.value = tear;
     crt.uniforms.uWobble.value = drift;
     crt.uniforms.uShock.value = shock;
+    crt.uniforms.tGhost.value = ghost.texture;
 
     composer.render();
+
+    ghostCopy.uniforms.tDiffuse.value = composer.writeBuffer.texture;
+    renderer.setRenderTarget(ghost);
+    ghostQuad.render(renderer);
+    renderer.setRenderTarget(null);
+    crt.uniforms.uHasGhost.value = 1;
+
     return { levels, tear };
   }
 
