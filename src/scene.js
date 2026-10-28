@@ -61,8 +61,8 @@ function makeArpegio() {
   const group = new THREE.Group();
   const steps = [];
   for (let i = 0; i < 8; i += 1) {
-    const box = new THREE.Mesh(new THREE.BoxGeometry(0.26, 0.055, 0.055), basic(IDLE));
-    box.position.y = (i - 3.5) * 0.085;
+    const box = new THREE.Mesh(new THREE.BoxGeometry(0.46, 0.07, 0.08), basic(0x24915a));
+    box.position.y = (i - 3.5) * 0.105;
     group.add(box);
     steps.push(box);
   }
@@ -71,15 +71,16 @@ function makeArpegio() {
 
 function makeAire() {
   const group = new THREE.Group();
-  const outer = new THREE.Mesh(new THREE.TorusGeometry(0.32, 0.008, 6, 48), basic(DIM, 0.9));
-  const inner = new THREE.Mesh(new THREE.TorusGeometry(0.16, 0.008, 6, 32), basic(DIM, 0.9));
+  const outer = new THREE.Mesh(new THREE.TorusGeometry(0.34, 0.02, 10, 48), basic(0x9dffc4));
+  const inner = new THREE.Mesh(new THREE.SphereGeometry(0.11, 18, 12), basic(0x173628));
+  inner.scale.z = 0.35;
   group.add(outer, inner);
   return { group, rings: [outer, inner] };
 }
 
 function makeFalla() {
   const group = new THREE.Group();
-  const body = new THREE.Mesh(new THREE.IcosahedronGeometry(0.26, 0), basic(DIM));
+  const body = new THREE.Mesh(new THREE.OctahedronGeometry(0.36, 0), basic(0x8dffb0));
   body.material.wireframe = true;
   group.add(body);
   return { group, body };
@@ -87,7 +88,7 @@ function makeFalla() {
 
 function hitSphere() {
   const mesh = new THREE.Mesh(
-    new THREE.SphereGeometry(0.46, 10, 10),
+    new THREE.SphereGeometry(0.55, 12, 12),
     new THREE.MeshBasicMaterial({ colorWrite: false, depthWrite: false }),
   );
   return mesh;
@@ -115,8 +116,8 @@ function backPanel() {
         vec2 cell = abs(fract(grid) - 0.5);
         float line = smoothstep(0.08, 0.015, min(cell.x, cell.y));
         float scan = 0.7 + 0.3 * sin(vUv.y * 120.0 + uTime * 1.5);
-        vec3 color = vec3(0.012, 0.028, 0.02);
-        color += vec3(0.04, 0.16, 0.09) * line * (0.2 + uR * 0.8) * scan;
+        vec3 color = vec3(0.008, 0.02, 0.014);
+        color += vec3(0.025, 0.09, 0.05) * line * (0.15 + uR * 0.55) * scan;
         gl_FragColor = vec4(color, 1.0);
       }
     `,
@@ -199,7 +200,7 @@ export function createWorld(canvas) {
   for (const name of ["PULSO", "ARPEGIO", "AIRE", "FALLA"]) {
     const key = name.toLowerCase();
     const sprite = label(name);
-    sprite.position.set(COLUMNS[key], -1.5, 0.1);
+    sprite.position.set(COLUMNS[key], -1.28, 0.2);
     scene.add(sprite);
   }
 
@@ -274,17 +275,19 @@ export function createWorld(canvas) {
       if (agent.personality === "arpegio") {
         node.visual.steps.forEach((box, step) => {
           const active = step === agent.step;
-          box.material.color.setHex(active ? PHOSPHOR : IDLE);
-          box.scale.z = active ? 1.8 : 1;
+          box.material.color.setHex(active ? PHOSPHOR : 0x1c7a48);
+          box.scale.x = active ? 1.25 : 0.72;
+          box.scale.z = active ? 1.6 : 1;
         });
         levels.arpegio = Math.max(levels.arpegio, node.flash);
       }
 
       if (agent.personality === "aire") {
         const swell = Math.sin(agent.theta) * 0.5 + 0.5;
-        node.visual.group.scale.setScalar(0.78 + swell * 0.42);
+        node.visual.group.scale.setScalar(0.7 + swell * 0.55);
         node.visual.group.rotation.z = agent.theta * 0.25;
-        paint(node, DIM, 0.35 + swell * 0.65);
+        node.visual.rings[0].material.color.setHex(PHOSPHOR);
+        node.visual.rings[1].material.color.setHex(swell > 0.5 ? 0x2f8f5a : 0x173628);
         breath += Math.sin(agent.theta);
         aireCount += 1;
         levels.aire = Math.max(levels.aire, swell);
@@ -294,7 +297,8 @@ export function createWorld(canvas) {
         node.visual.group.position.set(Math.sin(error) * 0.18, disagreement * 0.08, 0);
         node.visual.group.rotation.set(time * 0.35, agent.theta, error * 0.4);
         const hot = Math.min(1, disagreement + shock);
-        node.visual.body.material.color.setHex(hot > 0.45 ? PHOSPHOR : DIM);
+        node.visual.body.material.color.setHex(hot > 0.45 ? PHOSPHOR : 0x5ee09a);
+        node.visual.group.scale.setScalar(0.85 + disagreement * 0.55);
         tear += disagreement;
         fallaCount += 1;
         levels.falla = Math.max(levels.falla, disagreement);

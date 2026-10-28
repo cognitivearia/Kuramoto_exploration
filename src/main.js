@@ -38,6 +38,7 @@ let audio = null;
 let muted = false;
 let dragging = null;
 let moved = 0;
+let lastPointer = null;
 
 const NAMES = {
   pulso: "PULSO",
@@ -71,6 +72,7 @@ async function enterSystem() {
   ui.enter.textContent = "ABRIENDO";
   try {
     audio = await createAudio(agents);
+    window.protocolo.audioState = () => audio.contextState();
     ui.enterWrap.hidden = true;
   } catch (error) {
     ui.enter.disabled = false;
@@ -116,6 +118,7 @@ canvas.addEventListener("pointerdown", (event) => {
   dragging = id === null ? "protocol" : id;
   selected = id === null ? selected : id;
   moved = 0;
+  lastPointer = { x: event.clientX, y: event.clientY };
   document.body.classList.add("grabbing");
 });
 
@@ -124,19 +127,23 @@ canvas.addEventListener("pointermove", (event) => {
   const hover = world.pick(event.clientX, event.clientY);
   canvas.style.cursor = dragging !== null ? "grabbing" : hover === null ? "crosshair" : "grab";
   if (dragging === null) return;
-  moved += Math.abs(event.movementX) + Math.abs(event.movementY);
+  const dx = event.clientX - lastPointer.x;
+  const dy = event.clientY - lastPointer.y;
+  lastPointer = { x: event.clientX, y: event.clientY };
+  moved += Math.abs(dx) + Math.abs(dy);
   if (dragging === "protocol") {
-    setK(k - event.movementY * 0.028);
+    setK(k - dy * 0.028);
     return;
   }
   const agent = agents[dragging];
-  agent.theta += event.movementX * 0.01;
-  nudgeSolo(agent, -event.movementY * 0.012);
+  agent.theta += dx * 0.01;
+  nudgeSolo(agent, -dy * 0.012);
 });
 
 canvas.addEventListener("pointerup", () => {
   if (dragging === "protocol" && moved < 4) selected = null;
   dragging = null;
+  lastPointer = null;
   document.body.classList.remove("grabbing");
 });
 

@@ -31,7 +31,7 @@ export const CRTShader = {
     void main() {
       vec2 centered = vUv - 0.5;
       float curve = dot(centered, centered);
-      vec2 uv = vUv + centered * curve * 0.18;
+      vec2 uv = vUv + centered * curve * 0.08;
 
       float wave = sin(uv.y * 90.0 + uTime * 7.0);
       uv.x += wave * uWobble * 0.006;
