@@ -34,7 +34,7 @@ Abre la dirección que muestra la terminal. Pulsa **Entrar**. El navegador solo 
 ## Cómo tocarlo
 
 - Arrastra el vacío hacia arriba o abajo: sube o baja **K**.
-- Arrastra un nodo en horizontal: empujas su fase.
+- Arrastra un nodo en horizontal: lo dejas adelante o atrás. Ese desfase se oye varios pulsos y después el protocolo lo recoge. El tiempo está en `PHASE_HOLD`, en `src/kuramoto.js`.
 - Arrastra un nodo en vertical: cambias su tempo.
 - Flechas izquierda y derecha: **deriva**, qué tan distintos son los tempos de fábrica.
 - Flechas arriba y abajo: también mueven K.

@@ -1,8 +1,14 @@
-// Modelo clásico de Kuramoto.
-// dθᵢ/dt = ωᵢ + (K / N) * Σ sin(θⱼ − θᵢ)
-// θ es la fase, ω el tempo propio, K el protocolo, N el número de nodos.
+// Kuramoto con un desfase pedido por el gesto.
+// dθᵢ/dt = ωᵢ + (K / N) * Σ sin(θⱼ − θᵢ + φᵢ)
+// φ es cuánto adelante o atrás dejaste ese nodo.
+// Con φ = 0 la fórmula es el modelo clásico.
+// φ vuelve a 0 en PHASE_HOLD segundos: el protocolo recoge el desfase.
 
 export const TAU = Math.PI * 2;
+
+// Segundos que un desfase arrastrado se mantiene antes de volver al grupo.
+// Un pulso dura cerca de medio segundo. 4 s son varios pulsos, no uno.
+export const PHASE_HOLD = 4;
 
 const SPEC = [
   { personality: "pulso", base: 12.8 },
@@ -32,6 +38,10 @@ export function angleDiff(a, b) {
   return wrap(a - b + Math.PI) - Math.PI;
 }
 
+function wrapSigned(angle) {
+  return wrap(angle + Math.PI) - Math.PI;
+}
+
 export function createAgents(random = Math.random) {
   return SPEC.map((item, id) => {
     const theta = random() * TAU;
@@ -43,6 +53,7 @@ export function createAgents(random = Math.random) {
       offset: item.base - MEAN,
       solo: 0,
       omega: item.base,
+      phi: 0,
       theta,
       step: Math.floor((theta / TAU) * 8) % 8,
       wrapped: false,
@@ -65,8 +76,10 @@ function integrate(agents, k, dt) {
   for (let i = 0; i < count; i += 1) {
     let pull = 0;
     const phase = agents[i].theta;
+    const bias = agents[i].phi;
     for (let j = 0; j < count; j += 1) {
-      pull += Math.sin(agents[j].theta - phase);
+      if (j === i) continue;
+      pull += Math.sin(agents[j].theta - phase + bias);
     }
     velocity[i] = agents[i].omega + (k / count) * pull;
   }
@@ -118,11 +131,25 @@ export function stateName(r) {
   return "CERRADO";
 }
 
+export function nudgePhase(agent, delta) {
+  agent.theta = wrap(agent.theta + delta);
+  agent.phi = wrapSigned(agent.phi + delta);
+}
+
+export function relaxPhase(agents, dt, heldId = null) {
+  const keep = Math.exp(-dt / PHASE_HOLD);
+  for (const agent of agents) {
+    if (agent.id === heldId) continue;
+    agent.phi *= keep;
+  }
+}
+
 export function shock(agents, ids = null) {
   const targets = ids ?? agents.map((agent) => agent.id);
   for (const id of targets) {
     const kick = (Math.random() - 0.5) * Math.PI * 1.7;
     agents[id].theta = wrap(agents[id].theta + kick);
+    agents[id].phi = wrapSigned(agents[id].phi + kick);
   }
 }
 

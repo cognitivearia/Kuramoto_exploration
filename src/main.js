@@ -4,10 +4,13 @@ import {
   clamp,
   createAgents,
   LIMITS,
+  nudgePhase,
   orderParameter,
+  relaxPhase,
   shock,
   stateName,
   step,
+  TAU,
 } from "./kuramoto.js";
 import { createWorld } from "./scene.js";
 import { createAudio } from "./audio.js";
@@ -101,7 +104,10 @@ window.addEventListener("keydown", (event) => {
     perturb(event.shiftKey);
   }
   if (event.key === "r" || event.key === "R") {
-    for (const agent of agents) agent.theta = Math.random() * Math.PI * 2;
+    for (const agent of agents) {
+      agent.theta = Math.random() * Math.PI * 2;
+      agent.phi = 0;
+    }
   }
   if ((event.key === "m" || event.key === "M") && audio) {
     muted = !muted;
@@ -136,7 +142,8 @@ canvas.addEventListener("pointermove", (event) => {
     return;
   }
   const agent = agents[dragging];
-  agent.theta += dx * 0.01;
+  // Una pasada de unos 220 px recorre un ciclo completo.
+  nudgePhase(agent, dx * (TAU / 220));
   nudgeSolo(agent, -dy * 0.012);
 });
 
@@ -163,6 +170,7 @@ function frame(now) {
   clock += dt;
 
   applySpread(agents, spread);
+  relaxPhase(agents, dt, typeof dragging === "number" ? dragging : null);
   step(agents, k, dt);
   const { r, psi } = orderParameter(agents);
   shockAmount *= Math.exp(-(0.55 + k * 0.18) * dt);
