@@ -43,6 +43,7 @@ Abre la dirección que muestra la terminal. Pulsa **Entrar**. El navegador solo 
 - Teclas 1 a 8: eligen nodo. Escape suelta la elección.
 - R: fases nuevas, al azar.
 - M: silencio.
+- H: muestra u oculta los números. Al entrar, la pantalla va limpia.
 
 ## Las cuatro voces
 

@@ -30,6 +30,7 @@ const ui = {
   voices: [...document.querySelectorAll(".voices b")],
   enterWrap: document.querySelector("#enter-wrap"),
   enter: document.querySelector("#enter"),
+  hud: document.querySelector("#hud"),
 };
 
 let k = 1.2;
@@ -112,6 +113,9 @@ window.addEventListener("keydown", (event) => {
   if ((event.key === "m" || event.key === "M") && audio) {
     muted = !muted;
     audio.setMuted(muted);
+  }
+  if (event.key === "h" || event.key === "H") {
+    ui.hud.hidden = !ui.hud.hidden;
   }
   if (event.key >= "1" && event.key <= "8") selected = Number(event.key) - 1;
   if (event.key === "Escape") selected = null;
